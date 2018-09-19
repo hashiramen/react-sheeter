@@ -1,4 +1,6 @@
 import * as React from 'react';
+import styles from '../styles.css';
+
 
 export interface IReactSheeterProps {
     data: any[]
@@ -7,7 +9,7 @@ export interface IReactSheeterProps {
 export default class ReactSheeter extends React.Component<IReactSheeterProps, any> {
     public render() {
         return (
-            <div>
+            <div className={styles.reactSheeter}>
                 <p>React sheeter</p>
             </div>
         );
