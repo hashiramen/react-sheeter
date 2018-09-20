@@ -41,12 +41,18 @@ export default class App extends Component {
       let currentSheet = 0
       while ( hasMoreSheets ) {
         const wsname = wb.SheetNames[currentSheet];
+        console.log(wsname)
         if ( typeof wsname !== 'undefined' ) {
           const ws = wb.Sheets[wsname];
           /* Convert array of arrays */
           const data = XLSX.utils.sheet_to_json(ws, {header:1});
           /* Update state */
-  
+
+          const sheeterParsedData = sheeterParser({
+            name: wsname,
+            rowsData: data
+          })
+          console.log(sheeterParsedData)
         } else {
           hasMoreSheets = false
         }
