@@ -41,7 +41,7 @@ export default class App extends Component {
       let currentSheet = 0
       while ( hasMoreSheets ) {
         const wsname = wb.SheetNames[currentSheet];
-        console.log(wsname)
+        console.log("@NAME: ", wsname)
         if ( typeof wsname !== 'undefined' ) {
           const ws = wb.Sheets[wsname];
           /* Convert array of arrays */
@@ -51,8 +51,9 @@ export default class App extends Component {
           const sheeterParsedData = sheeterParser({
             name: wsname,
             rowsData: data
-          })
-          console.log(sheeterParsedData)
+          }, { schema })
+          console.log("@PARSED: ", sheeterParsedData)
+          console.log("____");
         } else {
           hasMoreSheets = false
         }
@@ -74,3 +75,16 @@ const make_cols = refstr => {
 	for(var i = 0; i < C; ++i) o[i] = {name:XLSX.utils.encode_col(i), key:i}
 	return o;
 };
+
+const schema = [
+  {
+    name: "Sheet2",
+    columns: [
+      {
+        name: "ho",
+        mandatory: true,
+        type: "string"
+      }
+    ]
+  }
+]
