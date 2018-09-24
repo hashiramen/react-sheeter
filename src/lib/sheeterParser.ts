@@ -35,7 +35,7 @@ export const sheeterParser: (_data: IShParser, _opt: IShOptions) => IShParser  =
 export interface ISheetDefinition {
     name: string;
     columns: IColumnDefinition[];
-    addColumn: ( _name: string, _type: string, _mandatory: boolean, _alwaysVisibleInSheet: boolean ) => this;
+    addColumn: ( _index: number, _name: string, _type: string, _mandatory: boolean, _alwaysVisibleInSheet: boolean ) => this;
 }
 
 export class Sheet implements ISheetDefinition {
@@ -46,9 +46,10 @@ export class Sheet implements ISheetDefinition {
         this.columns = [];
     }
 
-    addColumn = (_name: string, _type:string, _mandatory: boolean, _alwaysVisibleInSheet: boolean) => {
+    addColumn = ( _index: number, _name: string, _type:string, _mandatory: boolean, _alwaysVisibleInSheet: boolean ): Sheet => {
         this.columns.push(
             new Column(
+                _index,
                 _name,
                 _type,
                 _mandatory,
@@ -63,6 +64,7 @@ export class Sheet implements ISheetDefinition {
 
 
 export interface IColumnDefinition {
+    index: number;
     name: string;
     mandatory: boolean;
     alwaysVisibleInSheet: boolean;
@@ -70,14 +72,30 @@ export interface IColumnDefinition {
 }
 
 export class Column implements IColumnDefinition {
+    index: number;
     name: string;
     mandatory: boolean;
     alwaysVisibleInSheet: boolean;
     type: string;
-    constructor( _name: string, _type: string, _mandatory: boolean, _alwaysVisibleInSheet: boolean ) {
+    constructor( _index: number, _name: string, _type: string, _mandatory: boolean, _alwaysVisibleInSheet: boolean ) {
+        this.index = _index;
         this.name = _name;
         this.type = _type;
         this.mandatory = _mandatory;
         this.alwaysVisibleInSheet = _alwaysVisibleInSheet;
+    }
+}
+
+export interface ICellDefinition {
+    index: number;
+    value: any;
+}
+
+export class Cell implements ICellDefinition {
+    index: number;
+    value: any;
+    constructor( _index: number, _value: any ) {
+        this.index = _index;
+        this.value = _value;
     }
 }
