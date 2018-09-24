@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import readXlsxFile from 'read-excel-file' 
 import XLSX from 'xlsx'
-import ReactSheeter, { sheeterParser, Column, Sheet } from 'react-sheeter'
+import ReactSheeter, { sheeterParser, Sheet } from 'react-sheeter'
 
 
 export default class App extends Component {
@@ -74,20 +74,20 @@ export default class App extends Component {
 }
 
 
-const make_cols = refstr => {
-	let o = [], C = XLSX.utils.decode_range(refstr).e.c + 1;
-	for(var i = 0; i < C; ++i) o[i] = {name:XLSX.utils.encode_col(i), key:i}
-	return o;
-};
+// const make_cols = refstr => {
+// 	let o = [], C = XLSX.utils.decode_range(refstr).e.c + 1;
+// 	for(var i = 0; i < C; ++i) o[i] = {name:XLSX.utils.encode_col(i), key:i}
+// 	return o;
+// };
 
 
 
 const schema = [
   new Sheet("Sheet1")
-    .addColumn(0, "column1", "boolean", true, true)
-    .addColumn(1, "column2", "string", false, true)
-    .addColumn(2, "column3", "date", true, true)
-    .addColumn(3, "column4", "number", true, true)
-    .addColumn(4, "column5", "currency", true, true),
+    .addColumn("column1", "boolean", true, true)
+    .addColumn("column2", "string", false, true)
+    .addColumn("column3", "date", true, true)
+    .addColumn("column4", "number", true, true)
+    .addColumn("column5", "currency", true, true),
   new Sheet("Sheet2")
 ]

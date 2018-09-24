@@ -1,101 +1,41 @@
+import { ISheetDefinition } from "./Sheet";
+import { isNullOrUndefined } from "util";
+import { IColumnDefinition } from "./Column";
+import { ICellDefinition, Cell } from "./Cell";
+
 interface IShParser {
     name: string;
     rowsData: any[][];
 }
 
 interface IShOptions {
-    schema: ISheeterOptionsSchema[];
+    schema: ISheetDefinition[];
 }
 
-interface ISheeterOptionsSchema {
-    name: string;
-    columns: ISheeterColumn[];
-}
+export const sheeterParser: (_data: IShParser, _opt: IShOptions) => ISheetDefinition | undefined  = function(_data: IShParser, _opt: IShOptions): ISheetDefinition | undefined {
+    const currentSchema: ISheetDefinition | undefined = _opt.schema.find( sch => sch.name.toLowerCase() === _data.name.toLowerCase());
+    if( isNullOrUndefined(currentSchema ))
+        return undefined;
 
-interface ISheeterColumn {
-    name: string;
-    type: string;
-    mandatory: boolean;
-}
-
-export const sheeterParser: (_data: IShParser, _opt: IShOptions) => IShParser  = function(_data: IShParser, _opt: IShOptions): IShParser {
-    const headers: string[] = _data.rowsData[0];
-    console.log("@HEADERS: ", headers);
-    for (let index: number = 1; index < _data.rowsData.length; index++) {
+    const HEADERS: string[] = _data.rowsData[0];
+    for ( let index: number = 1; index < _data.rowsData.length; index++ ) {
+        setColumnIndex( index, HEADERS, currentSchema);
         const row: any = _data.rowsData[index];
-        for (let rowIndex: number = 0; rowIndex < row.length; rowIndex++) {
-            // const rowField: any = row[rowIndex];
+        const CELLS: ICellDefinition[] = []
+        for ( let rowIndex: number = 0; rowIndex < row.length; rowIndex++ ) {
+            CELLS.push( new Cell(rowIndex, row[rowIndex]));
         }
+        currentSchema.addRow( CELLS );
     }
-    return _data;
+    console.log(currentSchema);
+    return currentSchema;
 };
 
 
+const setColumnIndex = ( _loopIndex: number, _headers: string[], _schema: ISheetDefinition ): void => {
+    const targetColumn: IColumnDefinition | undefined = _schema.columns.find( col => col.name.toLowerCase() === _headers[_loopIndex]);
+    if( isNullOrUndefined(targetColumn) )
+        return;
 
-export interface ISheetDefinition {
-    name: string;
-    columns: IColumnDefinition[];
-    addColumn: ( _index: number, _name: string, _type: string, _mandatory: boolean, _alwaysVisibleInSheet: boolean ) => this;
-}
-
-export class Sheet implements ISheetDefinition {
-    name: string;
-    columns: IColumnDefinition[];
-    constructor( _name:string ){
-        this.name = _name;
-        this.columns = [];
-    }
-
-    addColumn = ( _index: number, _name: string, _type:string, _mandatory: boolean, _alwaysVisibleInSheet: boolean ): Sheet => {
-        this.columns.push(
-            new Column(
-                _index,
-                _name,
-                _type,
-                _mandatory,
-                _alwaysVisibleInSheet
-            )
-        );
-
-        return this;
-    };
-}
-
-
-
-export interface IColumnDefinition {
-    index: number;
-    name: string;
-    mandatory: boolean;
-    alwaysVisibleInSheet: boolean;
-    type: string;
-}
-
-export class Column implements IColumnDefinition {
-    index: number;
-    name: string;
-    mandatory: boolean;
-    alwaysVisibleInSheet: boolean;
-    type: string;
-    constructor( _index: number, _name: string, _type: string, _mandatory: boolean, _alwaysVisibleInSheet: boolean ) {
-        this.index = _index;
-        this.name = _name;
-        this.type = _type;
-        this.mandatory = _mandatory;
-        this.alwaysVisibleInSheet = _alwaysVisibleInSheet;
-    }
-}
-
-export interface ICellDefinition {
-    index: number;
-    value: any;
-}
-
-export class Cell implements ICellDefinition {
-    index: number;
-    value: any;
-    constructor( _index: number, _value: any ) {
-        this.index = _index;
-        this.value = _value;
-    }
-}
+    targetColumn.setIndex(_loopIndex);
+};

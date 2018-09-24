@@ -18,4 +18,7 @@ export default class ReactSheeterContainer extends React.Component<IReactSheeter
 }
 
 
-export { sheeterParser, Column, IColumnDefinition, Sheet, ISheetDefinition } from "./lib/sheeterParser";
+export { sheeterParser } from "./lib/sheeterParser";
+export { ICellDefinition } from "./lib/Cell";
+export { IColumnDefinition } from "./lib/Column";
+export { Sheet, ISheetDefinition } from "./lib/Sheet";
