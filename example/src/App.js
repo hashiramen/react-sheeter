@@ -2,12 +2,16 @@ import React, { Component } from 'react'
 
 import readXlsxFile from 'read-excel-file' 
 import XLSX from 'xlsx'
-import ReactSheeter, { sheeterParser } from 'react-sheeter'
+import ReactSheeter, { sheeterParser, Column, Sheet } from 'react-sheeter'
 
 
 export default class App extends Component {
   state = {
     parsedData: []
+  }
+
+  componentDidMount() {
+    console.log(schema);
   }
   
   render () {
@@ -76,15 +80,14 @@ const make_cols = refstr => {
 	return o;
 };
 
+
+
 const schema = [
-  {
-    name: "Sheet2",
-    columns: [
-      {
-        name: "ho",
-        mandatory: true,
-        type: "string"
-      }
-    ]
-  }
+  new Sheet("Sheet1")
+    .addColumn("column1", "boolean", true, true)
+    .addColumn("column2", "string", false, true)
+    .addColumn("column3", "date", true, true)
+    .addColumn("column4", "number", true, true)
+    .addColumn("column5", "currency", true, true),
+  new Sheet("Sheet2")
 ]

@@ -1,13 +1,14 @@
-import * as React from 'react';
-import styles from '../styles.css';
+import * as React from "react";
+import styles from "../styles.css";
+import { ISheetDefinition } from "..";
 
 
 export interface IReactSheeterProps {
-    data: any[]
+    data: ISheetDefinition[];
 }
 
 export default class ReactSheeter extends React.Component<IReactSheeterProps, any> {
-    public render() {
+    render() {
         return (
             <div className={styles.reactSheeter}>
                 <p>React sheeter</p>

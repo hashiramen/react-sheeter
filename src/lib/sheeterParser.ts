@@ -30,3 +30,54 @@ export const sheeterParser: (_data: IShParser, _opt: IShOptions) => IShParser  =
     return _data;
 };
 
+
+
+export interface ISheetDefinition {
+    name: string;
+    columns: IColumnDefinition[];
+    addColumn: ( _name: string, _type: string, _mandatory: boolean, _alwaysVisibleInSheet: boolean ) => this;
+}
+
+export class Sheet implements ISheetDefinition {
+    name: string;
+    columns: IColumnDefinition[];
+    constructor( _name:string ){
+        this.name = _name;
+        this.columns = [];
+    }
+
+    addColumn = (_name: string, _type:string, _mandatory: boolean, _alwaysVisibleInSheet: boolean) => {
+        this.columns.push(
+            new Column(
+                _name,
+                _type,
+                _mandatory,
+                _alwaysVisibleInSheet
+            )
+        );
+
+        return this;
+    };
+}
+
+
+
+export interface IColumnDefinition {
+    name: string;
+    mandatory: boolean;
+    alwaysVisibleInSheet: boolean;
+    type: string;
+}
+
+export class Column implements IColumnDefinition {
+    name: string;
+    mandatory: boolean;
+    alwaysVisibleInSheet: boolean;
+    type: string;
+    constructor( _name: string, _type: string, _mandatory: boolean, _alwaysVisibleInSheet: boolean ) {
+        this.name = _name;
+        this.type = _type;
+        this.mandatory = _mandatory;
+        this.alwaysVisibleInSheet = _alwaysVisibleInSheet;
+    }
+}
