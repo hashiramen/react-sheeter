@@ -1,6 +1,6 @@
 import * as React from "react";
 import styles from "../styles.css";
-import { ISheetDefinition } from "..";
+import { ISheetDefinition } from "../lib/Sheet";
 
 
 export interface IReactSheeterProps {
