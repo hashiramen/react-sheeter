@@ -7,7 +7,7 @@ export interface IReactSheeterContainerProps {
 }
 
 export default class ReactSheeterContainer extends React.Component<IReactSheeterContainerProps> {
-  render() {
+  public render() {
     const { data } = this.props;
     return (
       <ReactSheeter 

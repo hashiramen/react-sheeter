@@ -3,39 +3,41 @@ import { isNullOrUndefined } from "util";
 import { IColumnDefinition } from "./Column";
 import { ICellDefinition, Cell } from "./Cell";
 
-interface IShParser {
+interface ISheeterParser {
     name: string;
     rowsData: any[][];
 }
 
-interface IShOptions {
+interface ISheeterOptions {
     schema: ISheetDefinition[];
 }
 
-export const sheeterParser: (_data: IShParser, _opt: IShOptions) => ISheetDefinition | undefined  = function(_data: IShParser, _opt: IShOptions): ISheetDefinition | undefined {
-    const currentSchema: ISheetDefinition | undefined = _opt.schema.find( sch => sch.name.toLowerCase() === _data.name.toLowerCase());
+export const sheeterParser: (_data: ISheeterParser, _opt: ISheeterOptions) => ISheetDefinition | undefined  = function(_data: ISheeterParser, _opt: ISheeterOptions): ISheetDefinition | undefined {
+    const currentSchema: ISheetDefinition | undefined = _opt.schema.find( ( sch ) => sch.name.toLowerCase() === _data.name.toLowerCase());
     if( isNullOrUndefined(currentSchema ))
         return undefined;
 
     const HEADERS: string[] = _data.rowsData[0];
+    const LONGEST_INDEX_ARRAY = findLongestArrayIndex( _data.rowsData );
     for ( let index: number = 1; index < _data.rowsData.length; index++ ) {
         setColumnIndex( index, HEADERS, currentSchema);
         const row: any = _data.rowsData[index];
-        const CELLS: ICellDefinition[] = []
-        for ( let rowIndex: number = 0; rowIndex < row.length; rowIndex++ ) {
+        const CELLS: ICellDefinition[] = [];
+        for ( let rowIndex: number = 0; rowIndex < _data.rowsData[LONGEST_INDEX_ARRAY].length; rowIndex++ ) {
             CELLS.push( new Cell(rowIndex, row[rowIndex]));
         }
         currentSchema.addRow( CELLS );
     }
-    console.log(currentSchema);
     return currentSchema;
 };
 
 
 const setColumnIndex = ( _loopIndex: number, _headers: string[], _schema: ISheetDefinition ): void => {
-    const targetColumn: IColumnDefinition | undefined = _schema.columns.find( col => col.name.toLowerCase() === _headers[_loopIndex]);
+    const targetColumn: IColumnDefinition | undefined = _schema.columns.find( ( col ) => col.name.toLowerCase() === _headers[_loopIndex]);
     if( isNullOrUndefined(targetColumn) )
         return;
 
     targetColumn.setIndex(_loopIndex);
 };
+
+const findLongestArrayIndex: any = ( multiArray: any[][]): number => multiArray.map(function(a) { return a.length; }).indexOf(Math.max.apply(Math, multiArray.map(function(a) { return a.length; })));
