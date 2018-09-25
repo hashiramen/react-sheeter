@@ -2,16 +2,12 @@ import React, { Component } from 'react'
 
 import readXlsxFile from 'read-excel-file' 
 import XLSX from 'xlsx'
-import ReactSheeter, { sheeterParser, Sheet } from 'react-sheeter'
+import ReactSheeter, { sheeterParser, Sheet, ISheetDefinition } from 'react-sheeter'
 
 
 export default class App extends Component {
   state = {
     parsedData: []
-  }
-
-  componentDidMount() {
-    console.log(schema);
   }
   
   render () {
@@ -43,9 +39,9 @@ export default class App extends Component {
       /* Get first worksheet */
       let hasMoreSheets = true;
       let currentSheet = 0
+      const parsedData: ISheetDefinition[] = []
       while ( hasMoreSheets ) {
         const wsname = wb.SheetNames[currentSheet];
-        console.log("@NAME: ", wsname)
         if ( typeof wsname !== 'undefined' ) {
           const ws = wb.Sheets[wsname];
           /* Convert array of arrays */
@@ -56,14 +52,17 @@ export default class App extends Component {
             name: wsname,
             rowsData: data
           }, { schema })
-          console.log("@PARSED: ", sheeterParsedData)
-          console.log("____");
+          if(typeof sheeterParsedData !== 'undefined')
+            parsedData.push(sheeterParsedData);
         } else {
           hasMoreSheets = false
         }
 
         currentSheet++;
       }
+      
+      console.log(parsedData);
+      this.setState({ parsedData })
 		};
     if(rABS) {
       reader.readAsBinaryString(file)
@@ -84,10 +83,16 @@ export default class App extends Component {
 
 const schema = [
   new Sheet("Sheet1")
-    .addColumn("column1", "boolean", true, true)
+    .addColumn("id", "boolean", true, true)
     .addColumn("column2", "string", false, true)
     .addColumn("column3", "date", true, true)
     .addColumn("column4", "number", true, true)
     .addColumn("column5", "currency", true, true),
-  new Sheet("Sheet2")
+  new Sheet("Sheet3")
+    .addColumn("last_name", "string", true, true)
+    .addColumn("id", "number", true, true)
+    .addColumn("first_named", "string", true, true)
+    .addColumn("email", "string", true, true)
+    .addColumn("gender", "number", true, true)
+    .addColumn("ip_address", "number", true, true)
 ]

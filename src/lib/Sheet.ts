@@ -4,7 +4,7 @@ import { ICellDefinition } from "./Cell";
 export interface ISheetDefinition {
     name: string;
     columns: IColumnDefinition[];
-    rows: Array<Array<ICellDefinition>>;
+    rows: ICellDefinition[][];
     addColumn: (  _name: string, _type: string, _mandatory: boolean, _alwaysVisibleInSheet: boolean ) => ISheetDefinition;
     addRow: ( _row: ICellDefinition[] ) => void;
 }

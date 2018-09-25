@@ -3,39 +3,58 @@ import { isNullOrUndefined } from "util";
 import { IColumnDefinition } from "./Column";
 import { ICellDefinition, Cell } from "./Cell";
 
-interface IShParser {
+interface ISheeterParser {
     name: string;
     rowsData: any[][];
 }
 
-interface IShOptions {
+interface ISheeterOptions {
     schema: ISheetDefinition[];
 }
 
-export const sheeterParser: (_data: IShParser, _opt: IShOptions) => ISheetDefinition | undefined  = function(_data: IShParser, _opt: IShOptions): ISheetDefinition | undefined {
-    const currentSchema: ISheetDefinition | undefined = _opt.schema.find( sch => sch.name.toLowerCase() === _data.name.toLowerCase());
+export const sheeterParser: (_data: ISheeterParser, _opt: ISheeterOptions) => ISheetDefinition | undefined  = function(_data: ISheeterParser, _opt: ISheeterOptions): ISheetDefinition | undefined {
+    const currentSchema: ISheetDefinition | undefined = _opt.schema.find( ( sch ) => sch.name.toLowerCase() === _data.name.toLowerCase());
     if( isNullOrUndefined(currentSchema ))
         return undefined;
 
     const HEADERS: string[] = _data.rowsData[0];
-    for ( let index: number = 1; index < _data.rowsData.length; index++ ) {
-        setColumnIndex( index, HEADERS, currentSchema);
-        const row: any = _data.rowsData[index];
-        const CELLS: ICellDefinition[] = []
-        for ( let rowIndex: number = 0; rowIndex < row.length; rowIndex++ ) {
-            CELLS.push( new Cell(rowIndex, row[rowIndex]));
+    _data.rowsData.shift();
+    // const LONGEST_INDEX_ARRAY = findLongestArrayIndex( _data.rowsData );
+    const ROWS: ICellDefinition[][] =  []
+    for (let i = 0; i < currentSchema.columns.length; i++) {
+        const column: IColumnDefinition = currentSchema.columns[i];
+        const targetIndex: number = HEADERS.findIndex( x => x.toLowerCase() === column.name.toLowerCase());
+
+        const COLUMN_CELLS: ICellDefinition[] = [];
+        for (const row of _data.rowsData) {
+            if(targetIndex > -1) {
+                const cell: string = row[targetIndex];
+                COLUMN_CELLS.push( new Cell( column.uniq, cell ));
+            } else {
+                COLUMN_CELLS.push( new Cell( column.uniq, undefined ));
+            }
         }
-        currentSchema.addRow( CELLS );
+
+        ROWS.push(COLUMN_CELLS);
     }
-    console.log(currentSchema);
+
+    const arr: ICellDefinition[][] = []
+    for (let i = 0; i < ROWS.length; i++) {
+        const innerRow = ROWS[i];
+        
+        
+        
+        for (let a = 0; a < innerRow.length; a++) {
+            const cell: ICellDefinition = innerRow[a];
+            if(typeof arr[a] === 'undefined')
+                arr[a] = []
+
+            arr[a][i] = cell;
+
+            if(arr[a].length === ROWS.length)
+                currentSchema.addRow( arr[a] );
+        }
+    }
+
     return currentSchema;
-};
-
-
-const setColumnIndex = ( _loopIndex: number, _headers: string[], _schema: ISheetDefinition ): void => {
-    const targetColumn: IColumnDefinition | undefined = _schema.columns.find( col => col.name.toLowerCase() === _headers[_loopIndex]);
-    if( isNullOrUndefined(targetColumn) )
-        return;
-
-    targetColumn.setIndex(_loopIndex);
 };

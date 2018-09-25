@@ -1,14 +1,15 @@
+const uniqid = require('uniqid');
+
 export interface IColumnDefinition {
-    index: number;
+    uniq: string;
     name: string;
     mandatory: boolean;
     alwaysVisibleInSheet: boolean;
     type: string;
-    setIndex: ( _index: number ) => void;
 }
 
 export class Column implements IColumnDefinition {
-    index: number;
+    uniq: string;
     name: string;
     mandatory: boolean;
     alwaysVisibleInSheet: boolean;
@@ -18,9 +19,6 @@ export class Column implements IColumnDefinition {
         this.type = _type;
         this.mandatory = _mandatory;
         this.alwaysVisibleInSheet = _alwaysVisibleInSheet;
-    }
-
-    setIndex = ( _index: number ): void => {
-        this.index = _index;
+        this.uniq = uniqid();
     }
 }

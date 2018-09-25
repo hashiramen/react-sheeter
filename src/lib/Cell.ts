@@ -1,13 +1,14 @@
+
 export interface ICellDefinition {
-    index: number;
+    uniq: string;
     value: any;
 }
 
 export class Cell implements ICellDefinition {
-    index: number;
+    uniq: string;
     value: any;
-    constructor( _index: number, _value: any ) {
-        this.index = _index;
+    constructor( _uniq: string, _value: any ) {
+        this.uniq = _uniq;
         this.value = _value;
     }
 }
