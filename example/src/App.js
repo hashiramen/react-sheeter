@@ -15,7 +15,9 @@ export default class App extends Component {
       <div>
         <p>Example app</p>
         <input type="file" name="xlsxFile" onChange={this.handleFileXlsxChange}/>
-        <ReactSheeter data={this.state.parsedData}/>
+        <div style={{ maxWidth: "1280px", margin: "auto"}}>
+          <ReactSheeter data={this.state.parsedData}/>
+        </div>
       </div>
     )
   }
