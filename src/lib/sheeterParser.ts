@@ -20,10 +20,10 @@ export const sheeterParser: (_data: ISheeterParser, _opt: ISheeterOptions) => IS
     const HEADERS: string[] = _data.rowsData[0];
     _data.rowsData.shift();
     // const LONGEST_INDEX_ARRAY = findLongestArrayIndex( _data.rowsData );
-    const ROWS: ICellDefinition[][] =  []
+    const ROWS: ICellDefinition[][] =  [];
     for (let i = 0; i < currentSchema.columns.length; i++) {
         const column: IColumnDefinition = currentSchema.columns[i];
-        const targetIndex: number = HEADERS.findIndex( x => x.toLowerCase() === column.name.toLowerCase());
+        const targetIndex: number = HEADERS.findIndex( (x) => x.toLowerCase() === column.name.toLowerCase());
 
         const COLUMN_CELLS: ICellDefinition[] = [];
         for (const row of _data.rowsData) {
@@ -38,7 +38,7 @@ export const sheeterParser: (_data: ISheeterParser, _opt: ISheeterOptions) => IS
         ROWS.push(COLUMN_CELLS);
     }
 
-    const arr: ICellDefinition[][] = []
+    const arr: ICellDefinition[][] = [];
     for (let i = 0; i < ROWS.length; i++) {
         const innerRow = ROWS[i];
         
@@ -46,8 +46,8 @@ export const sheeterParser: (_data: ISheeterParser, _opt: ISheeterOptions) => IS
         
         for (let a = 0; a < innerRow.length; a++) {
             const cell: ICellDefinition = innerRow[a];
-            if(typeof arr[a] === 'undefined')
-                arr[a] = []
+            if(typeof arr[a] === "undefined")
+                arr[a] = [];
 
             arr[a][i] = cell;
 

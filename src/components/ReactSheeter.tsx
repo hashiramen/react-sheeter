@@ -10,17 +10,17 @@ export interface IReactSheeterProps {
 }
 
 interface IReactSheeterState {
-    currentSheet: ISheetDefinition
+    currentSheet: ISheetDefinition;
 }
 
 export default class ReactSheeter extends React.Component<IReactSheeterProps, IReactSheeterState> {
-    state: IReactSheeterState = {
-        currentSheet: {} as ISheetDefinition
-    }
-
     static defaultProps: IReactSheeterProps = {
         data: [],
-    }
+    };
+
+    state: IReactSheeterState = {
+        currentSheet: {} as ISheetDefinition,
+    };
 
     public render() {
         const { data } = this.props;
@@ -41,6 +41,6 @@ export default class ReactSheeter extends React.Component<IReactSheeterProps, IR
     }
 
     changeCurrentSheet = ( sheet: ISheetDefinition ) => {
-        this.setState({ currentSheet: sheet })
+        this.setState({ currentSheet: sheet });
     }
 }
