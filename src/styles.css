@@ -2,4 +2,79 @@
 
 .react-sheeter {
   width: 100%;
+  background: #f4f6f9;
+  padding: 1rem;
+  font-size: .75rem;
+  display: block;
+  box-sizing: border-box;
+}
+
+.rs-wrapper {
+  min-width: 100%;
+  max-height: 75vh;
+  overflow-y: scroll;
+  overflow-x: auto;
+  display: block;
+  box-sizing: border-box;
+}
+
+
+.react-sheeter ul {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  display: block;
+  box-sizing: border-box;
+}
+
+.react-sheeter .rs-headers {
+}
+
+.rs-headers .rs-header {
+  font-weight: 600;
+  display: block;
+  box-sizing: border-box;
+  font-size: .9rem;
+}
+
+.react-sheeter .rs-container {
+
+}
+
+.react-sheeter .rs-row {
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+}
+
+.rs-row .rs-col {
+  min-width: 20%;
+  background: #fff;
+  margin: 1px 2px;
+  display: block;
+  box-sizing: border-box;
+}
+
+.rs-col p {
+  padding: .2rem;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.rs-col.is-invalid {
+  background: rgba(255, 0, 0, 0.13);
+}
+
+input[type="text"] {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  padding: .2rem;
+  font-size: 1rem;
+  border:none;
+  text-decoration: none;
+  outline: none;
+  border-bottom: 1px solid rgba(0,0,0, .099);
+  display: block;
+  box-sizing: border-box;
 }

@@ -85,7 +85,20 @@ export default class App extends Component {
 
 const schema = [
   new Sheet("Sheet1")
-    .addColumn("id", "boolean", true, true)
+    .addColumn("id", "number", true, true, [
+      ( value ) => {
+        if( parseInt(value) !== 1 )
+          return {
+            errorMessage: "This value should be equal to 1",
+            isValid: false,
+          }
+
+          return {
+            errorMessage: "",
+            isValid: true,
+          }
+      }
+    ])
     .addColumn("column2", "string", false, true)
     .addColumn("column3", "date", true, true)
     .addColumn("column4", "number", true, true)
@@ -95,6 +108,6 @@ const schema = [
     .addColumn("id", "number", true, true)
     .addColumn("first_named", "string", true, true)
     .addColumn("email", "string", true, true)
-    .addColumn("gender", "number", true, true)
-    .addColumn("ip_address", "number", true, true)
+    .addColumn("gender", "string", true, true)
+    .addColumn("ip_address", "string", true, true)
 ]

@@ -28,13 +28,13 @@ export default class ReactSheeter extends React.Component<IReactSheeterProps, IR
 
         return (
             <div className={styles.reactSheeter}>
-                <ul>
+                <div>
                     {
                         data.map( (sheet, index: number) => (
                             <SheetTab key={index} data={sheet} handleSheetChange={this.changeCurrentSheet}/>
                         ))
                     }
-                </ul>
+                </div>
                 <Sheet data={currentSheet} />
             </div>
         );
