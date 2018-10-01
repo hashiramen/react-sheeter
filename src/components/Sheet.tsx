@@ -9,6 +9,7 @@ import { ICellDefinition } from "../lib/Cell";
 
 export interface ISheetProps {
     data: ISheetDefinition;
+    handleSheetRowsUpdate: ( _rows: ICellDefinition[][] ) => void;
 }
 
 export default class Sheet extends React.Component<ISheetProps, any> {
@@ -44,5 +45,6 @@ export default class Sheet extends React.Component<ISheetProps, any> {
         const newRows = [ ...this.props.data.rows ];
         newRows[_index] = _row;
         console.log(_index, newRows);
+        this.props.handleSheetRowsUpdate( newRows );
     }
 }

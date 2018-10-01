@@ -1,9 +1,11 @@
 import * as React from "react";
 import ReactSheeter from "./components/ReactSheeter";
+import { ISheetDefinition } from "./lib/Sheet";
 
 
 export interface IReactSheeterContainerProps {
-  data: any[];
+  data: ISheetDefinition[];
+  handleSheetsUpdate: ( _sheets: ISheetDefinition[] ) => void;
 }
 
 export default class ReactSheeterContainer extends React.Component<IReactSheeterContainerProps> {
@@ -12,8 +14,20 @@ export default class ReactSheeterContainer extends React.Component<IReactSheeter
     return (
       <ReactSheeter 
         data={data}
+        handleSheetUpdate={this.handleSheetUpdate}
       />
     );
+  }
+
+  handleSheetUpdate = ( _sheet: ISheetDefinition ) => {
+    const { data } = this.props;
+    const targetIndex: number = data.findIndex( ( s ) => s.name === _sheet.name );
+    const newSheets: ISheetDefinition[] = [
+      ...this.props.data,
+    ];
+    newSheets[targetIndex] = _sheet;
+
+    this.props.handleSheetsUpdate( newSheets );
   }
 }
 

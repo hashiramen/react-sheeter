@@ -16,10 +16,16 @@ export default class App extends Component {
         <p>Example app</p>
         <input type="file" name="xlsxFile" onChange={this.handleFileXlsxChange}/>
         <div style={{ maxWidth: "1280px", margin: "auto"}}>
-          <ReactSheeter data={this.state.parsedData}/>
+          <ReactSheeter data={this.state.parsedData} handleSheetsUpdate={this.handleSheetsUpdate}/>
         </div>
       </div>
     )
+  }
+
+  handleSheetsUpdate = ( _updatedSheets ) => {
+    this.setState({
+      parsedData: _updatedSheets
+    })
   }
 
   handleFileChange = (e) => {

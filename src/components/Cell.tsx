@@ -68,18 +68,20 @@ export default class Cell extends React.Component<ICellProps, ICellState> {
         );
     }
 
-    toggleEditMode = () => this.setState({ isEditMode: !this.state.isEditMode});
+    toggleEditMode = () => {
+        this.setState({ isEditMode: !this.state.isEditMode});
+
+        const newCell = { ...this.props.data, value: this.state.newValue} as ICellDefinition;
+        this.props.handleCellChange(
+            newCell,
+            this.props.index,
+        );
+    }
 
     handleNewValueChange = (e: any) => {
         this.setState({
             newValue: e.target.value,
         });
-
-        const newCell = { ...this.props.data, value: e.target.value } as ICellDefinition;
-        this.props.handleCellChange(
-            newCell,
-            this.props.index,
-        );
     }
 
     validateCell = (): void => {
