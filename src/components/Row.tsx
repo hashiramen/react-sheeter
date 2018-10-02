@@ -3,12 +3,14 @@ import { ICellDefinition } from "../lib/Cell";
 import Cell from "./Cell";
 import styles from "../styles.css";
 import { IColumnDefinition } from "../lib/Column";
+import { IFindKeyRefsResult } from "./ReactSheeter";
 
 export interface IRowProps {
     availableIndexes: number[];
     data: ICellDefinition[];
     columns: IColumnDefinition[];
     index: number;
+    refs: IFindKeyRefsResult[];
     handleRowChange: ( _row: ICellDefinition[], _index: number ) => void;
 }
 
@@ -24,9 +26,16 @@ export default class Row extends React.Component<IRowProps, any> {
                                 const column = columns.find( ( col ) => col.uniq === cell.uniq);
                                 if ( !column )
                                     return "Column definition not found";
+                                
+                                const targetRef = this.props.refs.find( ( ref ) => {
+                                    if(typeof ref === "undefined")
+                                        return false;
+
+                                    return ref.column.name === column.refColumn;
+                                });
 
                                 return (
-                                    <Cell key={cell.uniq} data={cell} index={index} column={column} handleCellChange={this.handleCellChange}/>
+                                    <Cell key={cell.uniq} data={cell} index={index} column={column} handleCellChange={this.handleCellChange} targetRef={targetRef!}/>
                                 );
                             })
                     }

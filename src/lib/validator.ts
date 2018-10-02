@@ -71,6 +71,19 @@ const parseBoolean = ( _value: any ): IValidateTypeResult => {
     };
 };
 
+const parseKeyType = ( _value: any ): IValidateTypeResult => {
+    if ( _value === "" || _value.match(/^ *$/) !== null)
+        return {
+            errorMessage: "Key field cannot be left empty",
+            isValid: false,
+        };
+    
+    return {
+        errorMessage: "",
+        isValid: true,
+    };
+};
+
 
 
 interface IValidateAvailableTypes {
@@ -79,13 +92,17 @@ interface IValidateAvailableTypes {
     currency: ( value: any ) => IValidateTypeResult;
     date: ( value: any ) => IValidateTypeResult;
     boolean: ( value: any ) => IValidateTypeResult;
+    key: ( value: any ) => IValidateTypeResult;
+    refkey: ( value: any ) => IValidateTypeResult;
 }
 
 const types: IValidateAvailableTypes = {
     boolean: parseBoolean,
     currency: parseCurrency,
     date: parseDate,
+    key: parseKeyType,
     number: parseNumber,
+    refkey: parseKeyType,
     string: parseString,
 };
 

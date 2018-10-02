@@ -2,13 +2,15 @@ import * as React from "react";
 import { ICellDefinition } from "../lib/Cell";
 import classnames from "classnames";
 import styles from "../styles.css";
-import { IColumnDefinition } from "../lib/Column";
+import { IColumnDefinition, ColumnRole } from "../lib/Column";
 import { validateType } from "../lib/validator";
+import { IFindKeyRefsResult } from "./ReactSheeter";
 
 export interface ICellProps {
     data: ICellDefinition;
     index: number;
     column: IColumnDefinition;
+    targetRef: IFindKeyRefsResult;
     handleCellChange: ( _cell: ICellDefinition, _index: number ) => void;
 }
 
@@ -44,7 +46,29 @@ export default class Cell extends React.Component<ICellProps, ICellState> {
     }
         
     public render() {
+        const { column, targetRef } = this.props;
         const { newValue } = this.state;
+
+        if(column.role === ColumnRole.RefKey) {
+            return (
+                <li className={classnames(styles.rsCol, !this.state.isValidType && styles.isInvalid )}>
+                    <select name="value" id="" value={newValue} onChange={this.handleDropDownChange}>
+                        <option value="">None</option>
+                        {
+                            targetRef.lookupKeys.map( ( key, index ) => {
+                                if(!key.value)
+                                    return null;
+
+                                return (
+                                    <option key={index} value={key.value}>{key.value}</option>
+                                );
+                            })
+                        }
+                    </select>
+                    { this.state.errorMessages.map( (e) => <p>{e}</p>)}
+                </li>
+            );
+        }
 
         return (
             <li className={classnames(styles.rsCol, !this.state.isValidType && styles.isInvalid )}>
@@ -68,10 +92,33 @@ export default class Cell extends React.Component<ICellProps, ICellState> {
         });
     }
 
+    handleDropDownChange = (e: any) => {
+        const newValue = e.target.value;
+        this.setState({
+            newValue,
+        });
+
+        const newCell = { ...this.props.data, value: newValue} as ICellDefinition;
+        this.props.handleCellChange(
+            newCell,
+            this.props.index,
+        );
+    }
+
     validateCell = (): void => {
-        const { column  } = this.props;
+        const { column, targetRef } = this.props;
         const { newValue } = this.state;
         const result = validateType( newValue, column.type );
+
+        if(targetRef) {
+            if(!targetRef.lookupKeys.some( (c) => c.value === newValue)) {
+                this.setState({
+                    errorMessages: [`This key does not exists on sheet: ${targetRef.column.parentSheet}`],
+                    isValidType: false,
+                });
+                return;
+            }
+        }
 
         if ( !result.isValid ) {
             this.setState({ isValidType: result.isValid,  errorMessages: [ result.errorMessage ] });

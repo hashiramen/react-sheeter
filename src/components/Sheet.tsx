@@ -6,9 +6,11 @@ import arraySort from "array-sort";
 import styles from "../styles.css";
 import classnames from "classnames";
 import { ICellDefinition } from "../lib/Cell";
+import { IFindKeyRefsResult } from "./ReactSheeter";
 
 export interface ISheetProps {
     data: ISheetDefinition;
+    refs: IFindKeyRefsResult[];
     handleSheetRowsUpdate: ( _rows: ICellDefinition[][] ) => void;
 }
 
@@ -33,7 +35,7 @@ export default class Sheet extends React.Component<ISheetProps, any> {
                 <ul className={styles.rsContainer}>
                     {
                         data.rows.map( ( row, index ) => (
-                            <Row key={index} data={row} availableIndexes={[1,2.3]} columns={data.columns} index={index} handleRowChange={this.handleRowChange}/>
+                            <Row key={index} data={row} availableIndexes={[1,2.3]} columns={data.columns} index={index} handleRowChange={this.handleRowChange} refs={this.props.refs}/>
                         ))
                     }
                 </ul>

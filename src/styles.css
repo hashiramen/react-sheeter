@@ -65,7 +65,13 @@
   background: rgba(255, 0, 0, 0.13);
 }
 
+.rs-col.is-invalid input[type="text"], .rs-col.is-invalid select {
+  background: rgba(255, 0, 0, 0.09);
+}
 input[type="text"] {
+  background: rgba(0,0,0, .025);
+}
+input[type="text"], select {
   display: block;
   box-sizing: border-box;
   width: 100%;

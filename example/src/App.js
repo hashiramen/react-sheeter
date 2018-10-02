@@ -15,7 +15,7 @@ export default class App extends Component {
       <div>
         <p>Example app</p>
         <input type="file" name="xlsxFile" onChange={this.handleFileXlsxChange}/>
-        <div style={{ maxWidth: "1280px", margin: "auto"}}>
+        <div style={{ maxWidth: "90%", margin: "auto"}}>
           <ReactSheeter data={this.state.parsedData} handleSheetsUpdate={this.handleSheetsUpdate}/>
         </div>
       </div>
@@ -90,6 +90,7 @@ export default class App extends Component {
 
 const schema = [
   new Sheet("Sheet1")
+    .addColumn("key", "key", [], 1)
     .addColumn("id", "number", true, true, [
       ( value ) => {
         if( parseInt(value) !== 1 )
@@ -104,15 +105,21 @@ const schema = [
           }
       }
     ])
-    .addColumn("column2", "string", false, true)
-    .addColumn("column3", "date", true, true)
-    .addColumn("column4", "number", true, true)
-    .addColumn("column5", "currency", true, true),
+    .addColumn("column2", "string")
+    .addColumn("column3", "date")
+    .addColumn("column4", "number")
+    .addColumn("column5", "currency"),
   new Sheet("Sheet3")
-    .addColumn("last_name", "string", true, true)
-    .addColumn("id", "number", true, true)
-    .addColumn("first_named", "string", true, true)
-    .addColumn("email", "string", true, true)
-    .addColumn("gender", "string", true, true)
-    .addColumn("ip_address", "string", true, true)
+    .addColumn("refKey", "refKey", [], 2, "Sheet1", "key")
+    .addColumn("key", "key", [], 1)
+    .addColumn("last_name", "string")
+    .addColumn("id", "number")
+    .addColumn("first_named", "string")
+    .addColumn("email", "string")
+    .addColumn("gender", "string")
+    .addColumn("ip_address", "string"),
+  new Sheet("ReferenceSheet")
+    .addColumn("refKey", "refKey", [], 2, "Sheet3", "key")
+    .addColumn("partner", "string")
+    .addColumn("something", "string")
 ]

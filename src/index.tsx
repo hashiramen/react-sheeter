@@ -26,7 +26,6 @@ export default class ReactSheeterContainer extends React.Component<IReactSheeter
       ...this.props.data,
     ];
     newSheets[targetIndex] = _sheet;
-
     this.props.handleSheetsUpdate( newSheets );
   }
 }
