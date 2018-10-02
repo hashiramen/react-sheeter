@@ -69,7 +69,6 @@ export default class App extends Component {
         currentSheet++;
       }
       
-      console.log(parsedData);
       this.setState({ parsedData })
 		};
     if(rABS) {

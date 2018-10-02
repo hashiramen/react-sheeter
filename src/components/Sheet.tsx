@@ -44,7 +44,6 @@ export default class Sheet extends React.Component<ISheetProps, any> {
     handleRowChange = ( _row: ICellDefinition[], _index: number ): void => {
         const newRows = [ ...this.props.data.rows ];
         newRows[_index] = _row;
-        console.log(_index, newRows);
         this.props.handleSheetRowsUpdate( newRows );
     }
 }

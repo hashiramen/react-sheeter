@@ -13,7 +13,6 @@ export interface ICellProps {
 }
 
 interface ICellState {
-    isEditMode: boolean;
     newValue: any;
     isValidType: boolean;
     errorMessages: string[];
@@ -22,7 +21,6 @@ interface ICellState {
 export default class Cell extends React.Component<ICellProps, ICellState> {
     state: ICellState = {
         errorMessages: [],
-        isEditMode: false,
         isValidType: true,
         newValue: "",
     };
@@ -46,31 +44,17 @@ export default class Cell extends React.Component<ICellProps, ICellState> {
     }
         
     public render() {
-        
+        const { newValue } = this.state;
+
         return (
-            <li className={classnames(styles.rsCol, !this.state.isValidType && styles.isInvalid )} onDoubleClick={this.toggleEditMode}>
-                { this.renderContent() }
+            <li className={classnames(styles.rsCol, !this.state.isValidType && styles.isInvalid )}>
+                <input type="text" name="" id="" value={newValue} onBlur={this.toggleEditMode} onChange={this.handleNewValueChange}/>
+                { this.state.errorMessages.map( (e) => <p>{e}</p>)}
             </li>
         );
     }
 
-    renderContent = () => {
-        const { newValue } = this.state;
-
-        if(this.state.isEditMode) {
-            return (
-                <input type="text" name="" id="" value={newValue} onBlur={this.toggleEditMode} onChange={this.handleNewValueChange}/>
-            );
-        }
-
-        return (
-            <p>{ newValue }</p>
-        );
-    }
-
     toggleEditMode = () => {
-        this.setState({ isEditMode: !this.state.isEditMode});
-
         const newCell = { ...this.props.data, value: this.state.newValue} as ICellDefinition;
         this.props.handleCellChange(
             newCell,
@@ -90,7 +74,7 @@ export default class Cell extends React.Component<ICellProps, ICellState> {
         const result = validateType( newValue, column.type );
 
         if ( !result.isValid ) {
-            this.setState({ isValidType: result.isValid,  errorMessages: [ ...this.state.errorMessages, result.errorMessage ] });
+            this.setState({ isValidType: result.isValid,  errorMessages: [ result.errorMessage ] });
             return;
         } else {
             if ( column.specificValidations.length === 0) {
@@ -101,7 +85,7 @@ export default class Cell extends React.Component<ICellProps, ICellState> {
             for (const validationFunction of column.specificValidations) {
                 const customValidationResult = validationFunction( newValue );
                 if ( !customValidationResult.isValid ) {
-                    this.setState({ isValidType: customValidationResult.isValid,  errorMessages: [ ...this.state.errorMessages, customValidationResult.errorMessage ] });
+                    this.setState({ isValidType: customValidationResult.isValid,  errorMessages: [ customValidationResult.errorMessage ] });
                     return;
                 } else {
                     this.setState({ isValidType: true,  errorMessages: [ ] });

@@ -25,7 +25,7 @@ const parseString = ( _value: any ): IValidateTypeResult => {
 };
 
 const parseNumber = ( _value: any ): IValidateTypeResult => {
-    if ( isNaN(_value) )
+    if ( isNaN(_value) || _value === "")
         return {
             errorMessage: "This value should be a number like '123' or '52323' but is not",
             isValid: false,
