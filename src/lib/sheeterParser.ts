@@ -23,7 +23,13 @@ export const sheeterParser: (_data: ISheeterParser, _opt: ISheeterOptions) => IS
     const ROWS: ICellDefinition[][] =  [];
     for (let i = 0; i < currentSchema.columns.length; i++) {
         const column: IColumnDefinition = currentSchema.columns[i];
-        const targetIndex: number = HEADERS.findIndex( (x) => x.toLowerCase() === column.name.toLowerCase());
+        const targetIndex: number = HEADERS.findIndex( (x) => {
+            if(typeof x !== "undefined") {
+                return x.toLowerCase() === column.name.toLowerCase();
+            }
+
+            return false;
+        });
 
         const COLUMN_CELLS: ICellDefinition[] = [];
         for (const row of _data.rowsData) {

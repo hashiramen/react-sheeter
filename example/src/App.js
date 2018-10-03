@@ -121,5 +121,8 @@ const schema = [
   new Sheet("ReferenceSheet")
     .addColumn("refKey", "refKey", [], 2, "Sheet3", "key")
     .addColumn("partner", "string")
-    .addColumn("something", "string")
+    .addColumn("something", "string"),
+  new Sheet("Leneo")
+    .addColumn("Restværdi", "key", [], 1)
+    .addColumn("Refference", "refKey", [], 2, "Leneo", "Restværdi")
 ]

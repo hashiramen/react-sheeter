@@ -111,7 +111,7 @@ export default class Cell extends React.Component<ICellProps, ICellState> {
         const result = validateType( newValue, column.type );
 
         if(targetRef) {
-            if(!targetRef.lookupKeys.some( (c) => c.value === newValue)) {
+            if(!targetRef.lookupKeys.some( (c) => c.value.toString() === newValue)) {
                 this.setState({
                     errorMessages: [`This key does not exists on sheet: ${targetRef.column.parentSheet}`],
                     isValidType: false,
