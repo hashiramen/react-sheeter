@@ -11,7 +11,7 @@ export interface IRowProps {
     columns: IColumnDefinition[];
     index: number;
     refs: IFindKeyRefsResult[];
-    handleRowChange: ( _row: ICellDefinition[], _index: number ) => void;
+    handleRowChange: (_row: ICellDefinition[], _index: number) => void;
 }
 
 export default class Row extends React.Component<IRowProps, any> {
@@ -22,20 +22,20 @@ export default class Row extends React.Component<IRowProps, any> {
                 <ul className={styles.rsRow}>
                     {
                         data
-                            .map( (cell, index) => {
-                                const column = columns.find( ( col ) => col.uniq === cell.uniq);
-                                if ( !column )
+                            .map((cell, index) => {
+                                const column = columns.find((col) => col.uniq === cell.uniq);
+                                if (!column)
                                     return "Column definition not found";
-                                
-                                const targetRef = this.props.refs.find( ( ref ) => {
-                                    if(typeof ref === "undefined")
+
+                                const targetRef = this.props.refs.find((ref) => {
+                                    if (typeof ref === "undefined")
                                         return false;
 
                                     return ref.column.name === column.refColumn;
                                 });
 
                                 return (
-                                    <Cell key={cell.uniq} data={cell} index={index} column={column} handleCellChange={this.handleCellChange} targetRef={targetRef!}/>
+                                    <Cell key={cell.uniq} data={cell} index={index} column={column} handleCellChange={this.handleCellChange} targetRef={targetRef!} />
                                 );
                             })
                     }
@@ -45,9 +45,9 @@ export default class Row extends React.Component<IRowProps, any> {
     }
 
 
-    handleCellChange = ( _cell: ICellDefinition, _index: number ) => {
-        const newRow = [ ...this.props.data ];
+    handleCellChange = (_cell: ICellDefinition, _index: number) => {
+        const newRow = [...this.props.data];
         newRow[_index] = _cell;
-        this.props.handleRowChange( newRow, this.props.index );
+        this.props.handleRowChange(newRow, this.props.index);
     }
 }
