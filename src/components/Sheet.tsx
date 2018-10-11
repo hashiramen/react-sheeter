@@ -2,7 +2,6 @@ import * as React from "react";
 import { ISheetDefinition } from "../lib/Sheet";
 import Column from "./Column";
 import Row from "./Row";
-import arraySort from "array-sort";
 import styles from "../styles.css";
 import classnames from "classnames";
 import { ICellDefinition } from "../lib/Cell";
@@ -21,16 +20,14 @@ export default class Sheet extends React.Component<ISheetProps, any> {
         if(Object.keys(data).length === 0)
             return null;
 
-
         return (
             <div className={styles.rsWrapper}>
                 <ul className={classnames(styles.rsHeaders, styles.rsRow)}>
                     {
-                        arraySort(data.columns, "index")
-                        .map( (col, index) => (
-                            <Column key={index} data={col} />
+                        data.columns.map( (col) => (
+                            <Column key={col.uniq} data={col} />
                         ))
-                    }
+                    }z
                 </ul>
                 <ul className={styles.rsContainer}>
                     {

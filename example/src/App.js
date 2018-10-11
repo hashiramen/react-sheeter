@@ -123,5 +123,5 @@ const schema = [
     .addColumn("partner", "string")
     .addColumn("something", "string"),
   new Sheet("Beregning")
-    .addColumn("Hovedskema", "number")
+    .addColumn("Hovedskema", "number"),
 ]
