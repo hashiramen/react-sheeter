@@ -7,7 +7,7 @@ export interface ISheetTabProps {
     handleSheetChange: ( sheet: ISheetDefinition ) => void; 
 }
 
-export default class SheetTab extends React.Component<ISheetTabProps, any> {
+export default class SheetTab extends React.PureComponent<ISheetTabProps, any> {
     public render() {
         const { data } = this.props;
         return (

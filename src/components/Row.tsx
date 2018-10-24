@@ -4,6 +4,7 @@ import Cell from "./Cell";
 import styles from "../styles.css";
 import { IColumnDefinition } from "../lib/Column";
 import { IFindKeyRefsResult } from "./ReactSheeter";
+import { IKeyResolver } from "../lib/keyCleanUp";
 
 export interface IRowProps {
     availableIndexes: number[];
@@ -11,10 +12,10 @@ export interface IRowProps {
     columns: IColumnDefinition[];
     index: number;
     refs: IFindKeyRefsResult[];
-    handleRowChange: (_row: ICellDefinition[], _index: number) => void;
+    handleRowChange: (_row: ICellDefinition[], _index: number, _keyResolver: IKeyResolver) => void;
 }
 
-export default class Row extends React.Component<IRowProps, any> {
+export default class Row extends React.PureComponent<IRowProps, any> {
     public render() {
         const { data, columns } = this.props;
         return (
@@ -45,9 +46,9 @@ export default class Row extends React.Component<IRowProps, any> {
     }
 
 
-    handleCellChange = (_cell: ICellDefinition, _index: number) => {
+    handleCellChange = (_cell: ICellDefinition, _index: number, _keyResolver: IKeyResolver) => {
         const newRow = [...this.props.data];
         newRow[_index] = _cell;
-        this.props.handleRowChange(newRow, this.props.index);
+        this.props.handleRowChange(newRow, this.props.index, _keyResolver);
     }
 }

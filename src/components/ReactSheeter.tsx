@@ -5,18 +5,19 @@ import Sheet from "./Sheet";
 import SheetTab from "./SheetTab";
 import { ICellDefinition } from "../lib/Cell";
 import { ColumnRole, IColumnDefinition } from "../lib/Column";
+import { IKeyResolver } from "../lib/keyCleanUp";
 
 
 export interface IReactSheeterProps {
     data: ISheetDefinition[];
-    handleSheetUpdate: ( _sheet: ISheetDefinition ) => void;
+    handleSheetUpdate: ( _sheet: ISheetDefinition, _keyResolver: IKeyResolver  ) => void;
 }
 
 interface IReactSheeterState {
     currentSheet: ISheetDefinition;
 }
 
-export default class ReactSheeter extends React.Component<IReactSheeterProps, IReactSheeterState> {
+export default class ReactSheeter extends React.PureComponent<IReactSheeterProps, IReactSheeterState> {
     static defaultProps: IReactSheeterProps = {
         data: [],
         handleSheetUpdate: ( _sheet: ISheetDefinition ) => null,
@@ -56,9 +57,9 @@ export default class ReactSheeter extends React.Component<IReactSheeterProps, IR
         this.setState({ currentSheet: sheet });
     }
 
-    handleSheetRowsUpdate = ( _rows: ICellDefinition[][] ) => {
-        const newSheet: ISheetDefinition = { ...this.state.currentSheet, rows: [ ..._rows ] };
-        this.props.handleSheetUpdate( newSheet );
+    handleSheetRowsUpdate = ( _rows: ICellDefinition[][], _keyResolver: IKeyResolver ) => {
+        const newSheet: ISheetDefinition = { ...this.state.currentSheet, rows: _rows };
+        this.props.handleSheetUpdate( newSheet, _keyResolver );
     }
 
     private findKeysForCurrentSheet = (): IFindKeyRefsResult[] => {

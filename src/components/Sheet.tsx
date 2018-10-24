@@ -6,14 +6,15 @@ import styles from "../styles.css";
 import classnames from "classnames";
 import { ICellDefinition } from "../lib/Cell";
 import { IFindKeyRefsResult } from "./ReactSheeter";
+import { IKeyResolver } from "../lib/keyCleanUp";
 
 export interface ISheetProps {
     data: ISheetDefinition;
     refs: IFindKeyRefsResult[];
-    handleSheetRowsUpdate: ( _rows: ICellDefinition[][] ) => void;
+    handleSheetRowsUpdate: ( _rows: ICellDefinition[][], _keyResolver: IKeyResolver ) => void;
 }
 
-export default class Sheet extends React.Component<ISheetProps, any> {
+export default class Sheet extends React.PureComponent<ISheetProps, any> {
     public render() {
         const { data } = this.props;
 
@@ -40,9 +41,9 @@ export default class Sheet extends React.Component<ISheetProps, any> {
         );
     }
 
-    handleRowChange = ( _row: ICellDefinition[], _index: number ): void => {
+    handleRowChange = ( _row: ICellDefinition[], _index: number, _keyResolver: IKeyResolver ): void => {
         const newRows = [ ...this.props.data.rows ];
         newRows[_index] = _row;
-        this.props.handleSheetRowsUpdate( newRows );
+        this.props.handleSheetRowsUpdate( newRows, _keyResolver );
     }
 }

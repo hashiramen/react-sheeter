@@ -5,13 +5,14 @@ import styles from "../styles.css";
 import { IColumnDefinition, ColumnRole } from "../lib/Column";
 import { validateType } from "../lib/validator";
 import { IFindKeyRefsResult } from "./ReactSheeter";
+import { IKeyResolver } from "../lib/keyCleanUp";
 
 export interface ICellProps {
     data: ICellDefinition;
     index: number;
     column: IColumnDefinition;
     targetRef: IFindKeyRefsResult;
-    handleCellChange: ( _cell: ICellDefinition, _index: number ) => void;
+    handleCellChange: ( _cell: ICellDefinition, _index: number, _keyResolver: IKeyResolver ) => void;
 }
 
 interface ICellState {
@@ -20,7 +21,7 @@ interface ICellState {
     errorMessages: string[];
 }
 
-export default class Cell extends React.Component<ICellProps, ICellState> {
+export default class Cell extends React.PureComponent<ICellProps, ICellState> {
     state: ICellState = {
         errorMessages: [],
         isValidType: true,
@@ -72,17 +73,20 @@ export default class Cell extends React.Component<ICellProps, ICellState> {
 
         return (
             <li className={classnames(styles.rsCol, !this.state.isValidType && styles.isInvalid )}>
-                <input type="text" name="" id="" value={newValue} onBlur={this.toggleEditMode} onChange={this.handleNewValueChange}/>
-                { this.state.errorMessages.map( (e) => <p>{e}</p>)}
+                <input type="text" value={newValue} onBlur={this.handleCellUpdate} onChange={this.handleNewValueChange}/>
+                { this.state.errorMessages.map( (errorMessage) => <p>{errorMessage}</p>)}
             </li>
         );
     }
 
-    toggleEditMode = () => {
-        const newCell = { ...this.props.data, value: this.state.newValue} as ICellDefinition;
+    handleCellUpdate = () => {
+        const { newValue } = this.state;
+        const newCell = { ...this.props.data, value: newValue } as ICellDefinition;
+        const keyResolver: IKeyResolver = this.createKeyResolver(newValue);
         this.props.handleCellChange(
             newCell,
             this.props.index,
+            keyResolver,
         );
     }
 
@@ -99,10 +103,22 @@ export default class Cell extends React.Component<ICellProps, ICellState> {
         });
 
         const newCell = { ...this.props.data, value: newValue} as ICellDefinition;
+        const keyResolver: IKeyResolver = this.createKeyResolver(newValue);
         this.props.handleCellChange(
             newCell,
             this.props.index,
+            keyResolver,
         );
+    }
+
+    createKeyResolver = ( newValue: any ): IKeyResolver => {
+        const keyWasUpdated: boolean = this.props.column.role === ColumnRole.Key;
+        return {
+            column: this.props.column,
+            keyWasUpdated,
+            lastValue: this.props.data.value,
+            newValue,
+        };
     }
 
     validateCell = (): void => {
@@ -119,7 +135,7 @@ export default class Cell extends React.Component<ICellProps, ICellState> {
                 return false;
             })) {
                 this.setState({
-                    errorMessages: [`This key does not exists on sheet: ${targetRef.column.parentSheet}`],
+                    errorMessages: [`This key does not exists on the sheet: ${targetRef.column.parentSheet}`],
                     isValidType: false,
                 });
                 return;

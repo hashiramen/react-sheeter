@@ -7,7 +7,7 @@ export interface IColumnProps {
     data: IColumnDefinition;
 }
 
-export default class Column extends React.Component<IColumnProps, any> {
+export default class Column extends React.PureComponent<IColumnProps, any> {
     public render() {
         const { data } = this.props;
         return (
