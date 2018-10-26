@@ -2,6 +2,7 @@
 
 .react-sheeter {
   width: 100%;
+  height: 100%;
   background: #f4f6f9;
   padding: 1rem;
   font-size: .75rem;
@@ -10,8 +11,9 @@
 }
 
 .rs-wrapper {
+  margin-top: 1.2rem;
   min-width: 100%;
-  max-height: 75vh;
+  height: 100%;
   overflow-y: scroll;
   overflow-x: auto;
   display: block;
@@ -28,13 +30,17 @@
 }
 
 .react-sheeter .rs-headers {
+  margin-bottom: .65rem;
+  padding-bottom: .65rem;
 }
 
 .rs-headers .rs-header {
   font-weight: 600;
   display: block;
   box-sizing: border-box;
-  font-size: .9rem;
+  font-size: .6rem;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
 .react-sheeter .rs-container {
@@ -49,10 +55,14 @@
 
 .rs-row .rs-col {
   min-width: 20%;
-  background: #fff;
+  max-width: 20%;
+  /* background: #fff; */
   margin: 1px 2px;
   display: block;
   box-sizing: border-box;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
 }
 
 .rs-col p {
@@ -61,15 +71,29 @@
   margin: 0;
 }
 
+.rs-col input[type="text"],
+.rs-col select {
+  flex: 1 0;
+  max-width: 90%;
+  min-width: 90%;
+  flex-basis: 90%;
+}
+
+.rs-col .rs-errors {
+  flex: 1 0;
+  text-align: center;
+  margin: auto;
+}
+
 .rs-col.is-invalid {
-  background: rgba(255, 0, 0, 0.13);
+  /* background: rgba(255, 0, 0, 0.13); */
 }
 
 .rs-col.is-invalid input[type="text"], .rs-col.is-invalid select {
-  background: rgba(255, 0, 0, 0.09);
+  background: rgba(255, 0, 0, 0.03);
 }
 input[type="text"] {
-  background: rgba(0,0,0, .025);
+  background: rgba(153, 178, 194, 0.03);
 }
 input[type="text"], select {
   display: block;
@@ -80,7 +104,48 @@ input[type="text"], select {
   border:none;
   text-decoration: none;
   outline: none;
-  border-bottom: 1px solid rgba(0,0,0, .099);
+  border-bottom: 1px solid rgba(0,0,0, .049);
   display: block;
   box-sizing: border-box;
 }
+
+.rs-button {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #000;
+  padding: .2rem .4rem;
+  font-size: 1rem;
+  color: #99B2C2;
+  transition: all .2s ease;
+}
+
+.rs-button:hover {
+  cursor: pointer;
+  color: #052FB8;
+}
+
+.rs-errors {
+
+}
+
+.rs-errors__icon {
+  display: block;
+  margin: auto!important;
+  border-radius: 50%;
+  background: rgba(255, 0, 0, 0.255);
+  color: #f4f6f9;
+  max-width: 17px;
+  max-height: 17px;
+  transition: all .2s ease;
+}
+
+.rs-errors__icon:hover {
+  background: rgba(255, 0, 0, 0.555);
+  cursor: pointer;
+}
+
+.rs-errors__container {
+
+}
+

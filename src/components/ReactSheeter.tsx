@@ -28,6 +28,9 @@ export default class ReactSheeter extends React.PureComponent<IReactSheeterProps
     };
 
     componentDidUpdate(prevProps: IReactSheeterProps) {
+        if(prevProps.data.length === 0 && prevProps.data !== this.props.data)
+            this.setState({ currentSheet: this.props.data[0] });
+
         const target = this.props.data.find( ( x ) => x.name === this.state.currentSheet.name);
         if(target && prevProps.data !== this.props.data) {
             this.setState({ currentSheet: target });
@@ -72,12 +75,6 @@ export default class ReactSheeter extends React.PureComponent<IReactSheeterProps
             return [];
 
         const { data } = this.props;
-
-        // const result = data
-        //     .filter( ( s ) => s.name === keyColumn.refSheet && s.columns
-        //         .filter( ( c ) => c.role === ColumnRole.Key && c.refColumn === keyColumn.refColumn))
-        //             .map( ( x ) => x.columns[0]);
-
         const results: IFindKeyRefsResult[] = data
             .map( ( s ) => {
 

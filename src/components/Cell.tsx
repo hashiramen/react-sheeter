@@ -41,24 +41,27 @@ export default class Cell extends React.PureComponent<ICellProps, ICellState> {
             this.validateCell();
         }
         
-        if(false) {
+        if(false) 
             console.log(prevProps);
-        }
     }
         
     public render() {
         const { column, targetRef } = this.props;
         const { newValue } = this.state;
-
+        
+        const value = newValue ? newValue : "";
         if(column.role === ColumnRole.RefKey) {
             return (
                 <li className={classnames(styles.rsCol, !this.state.isValidType && styles.isInvalid )}>
-                    <select name="value" id="" value={newValue} onChange={this.handleDropDownChange}>
+                    <select 
+                        name="value" 
+                        id="" 
+                        value={value} 
+                        onChange={this.handleDropDownChange}>
                         <option value="">None</option>
                         {
                             targetRef.lookupKeys.map( ( key, index ) => {
-                                if(!key.value)
-                                    return null;
+                                if(!key.value) return null;
 
                                 return (
                                     <option key={index} value={key.value}>{key.value}</option>
@@ -66,15 +69,31 @@ export default class Cell extends React.PureComponent<ICellProps, ICellState> {
                             })
                         }
                     </select>
-                    { this.state.errorMessages.map( (e) => <p>{e}</p>)}
+                    <div className={styles.rsErrors}>
+                        {
+                            this.state.errorMessages.length > 0 
+                            && <p className={styles.rsErrorsIcon}>!</p>
+                            // : this.state.errorMessages.map( (e, index) => <p key={index}>{e}</p>)
+                        }
+                    </div>
                 </li>
             );
         }
 
         return (
             <li className={classnames(styles.rsCol, !this.state.isValidType && styles.isInvalid )}>
-                <input type="text" value={newValue} onBlur={this.handleCellUpdate} onChange={this.handleNewValueChange}/>
-                { this.state.errorMessages.map( (errorMessage) => <p>{errorMessage}</p>)}
+                <input 
+                    type="text" 
+                    value={value} 
+                    onBlur={this.handleCellUpdate} 
+                    onChange={this.handleNewValueChange}/>
+                <div className={styles.rsErrors}>
+                    {
+                        this.state.errorMessages.length > 0 
+                        && <p className={styles.rsErrorsIcon}>!</p>
+                        // : this.state.errorMessages.map( (e, index) => <p key={index}>{e}</p>)
+                    }
+                </div>
             </li>
         );
     }

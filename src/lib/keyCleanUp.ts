@@ -11,37 +11,45 @@ export interface IKeyResolver {
 
 
 export const keyCleanUp = ( _sheets: ISheetDefinition[], _keyResolver: IKeyResolver): ISheetDefinition[] => {
-    console.log(_keyResolver);
-    const { keyWasUpdated, column, lastValue } = _keyResolver;
+    const { keyWasUpdated, column, lastValue, newValue } = _keyResolver;
+    
     if(keyWasUpdated && lastValue) {
+        const updatedSheets: ISheetDefinition[] = _sheets;
+
         for (let index = 0; index < _sheets.length; index++) {
             const sheet: ISheetDefinition = _sheets[index];
             
-            const correspondedColumns: IColumnDefinition[] = sheet.columns
-                .filter( ( refColumn ) => {
-                    if(refColumn.role === ColumnRole.RefKey &&
-                        refColumn.refColumn === column.name &&
-                        refColumn.refSheet === column.parentSheet)
-                        return refColumn;
+            const correspondedColumns: IColumnDefinition[] = findCorrespondedColumns(sheet, column);
 
-                    return false;
-                });
-
-            if(correspondedColumns.length === 0)
+            if(correspondedColumns.length === 0) {
+                updatedSheets[index] = sheet;
                 continue;
+            }
             
-
-            
-            updateRowsOfCertainKey(sheet.rows, correspondedColumns, _keyResolver.newValue);
+            const updatedMatrix: ICellDefinition[][] = updateRowsOfCertainKey(sheet.rows, correspondedColumns, newValue, lastValue);
+            updatedSheets[index] = sheet;
+            updatedSheets[index].rows = updatedMatrix;
         }
-    }
 
-    return _sheets;
+        return updatedSheets;
+    } else {
+        return _sheets;
+    }
 };
 
+const findCorrespondedColumns = ( _sheet: ISheetDefinition, _originalColumn: IColumnDefinition ): IColumnDefinition[] => _sheet.columns
+    .filter( ( refColumn ) => {
+        if(refColumn.role === ColumnRole.RefKey &&
+            refColumn.refColumn === _originalColumn.name &&
+            refColumn.refSheet === _originalColumn.parentSheet)
+            return refColumn;
 
+        return false;
+    });
 
-const updateRowsOfCertainKey = ( _rows: ICellDefinition[][], _targetColumns: IColumnDefinition[], _newValue: any ) => {
+const updateRowsOfCertainKey = ( _rows: ICellDefinition[][], _targetColumns: IColumnDefinition[], _newValue: any, _lastValue: any ): ICellDefinition[][] => {
+    const newCellMatrix: ICellDefinition[][] = [];
+
     for (let i = 0; i < _rows.length; i++) {
         const row = _rows[i];
         
@@ -57,13 +65,19 @@ const updateRowsOfCertainKey = ( _rows: ICellDefinition[][], _targetColumns: ICo
                 continue;
             }
                 
-            if(columnfOfCell.)
-            newRow[z] = {
-                uniq: cell.uniq,
-                value: _newValue,
-            };
+            if(cell.value === _lastValue) {
+                newRow[z] = {
+                    uniq: cell.uniq,
+                    value: _newValue === "" ? undefined : _newValue,
+                };
+                continue;
+            }
+
+            newRow[z] = cell;
         }
 
-        console.log(newRow);
+        newCellMatrix[i] = newRow;
     }
-}
+
+    return newCellMatrix;
+};

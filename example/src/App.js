@@ -15,7 +15,7 @@ export default class App extends Component {
       <div>
         <p>Example app</p>
         <input type="file" name="xlsxFile" onChange={this.handleFileXlsxChange}/>
-        <div style={{ maxWidth: "90%", margin: "auto"}}>
+        <div style={{ maxWidth: "99%", margin: "auto", height: "90vh", minHeight: "90vh"}}>
           <ReactSheeter data={this.state.parsedData} handleSheetsUpdate={this.handleSheetsUpdate}/>
         </div>
       </div>
@@ -80,37 +80,15 @@ export default class App extends Component {
 }
 
 
-// const make_cols = refstr => {
-// 	let o = [], C = XLSX.utils.decode_range(refstr).e.c + 1;
-// 	for(var i = 0; i < C; ++i) o[i] = {name:XLSX.utils.encode_col(i), key:i}
-// 	return o;
-// };
-
-
-
 const schema = [
   new Sheet("Sheet1")
-    .addColumn("key", "key", [], 1)
-    .addColumn("id", "number", true, true, [
-      ( value ) => {
-        if( parseInt(value) !== 1 )
-          return {
-            errorMessage: "This value should be equal to 1",
-            isValid: false,
-          }
-
-          return {
-            errorMessage: "",
-            isValid: true,
-          }
-      }
-    ])
+    .addColumn("id", "key", [], 1)
     .addColumn("column2", "string")
     .addColumn("column3", "date")
     .addColumn("column4", "number")
     .addColumn("column5", "currency"),
   new Sheet("Sheet3")
-    .addColumn("refKey", "refKey", [], 2, "Sheet1", "key")
+    .addColumn("refKey", "refKey", [], 2, "Sheet1", "id")
     .addColumn("key", "key", [], 1)
     .addColumn("last_name", "string")
     .addColumn("id", "number")
@@ -123,6 +101,5 @@ const schema = [
     .addColumn("partner", "string")
     .addColumn("something", "string"),
   new Sheet("Beregning")
-    .addColumn("Hovedskema", "number"),
- 
+    .addColumn("Hovedskema", "number")
 ]

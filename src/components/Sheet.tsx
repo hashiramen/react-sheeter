@@ -28,7 +28,7 @@ export default class Sheet extends React.PureComponent<ISheetProps, any> {
                         data.columns.map( (col) => (
                             <Column key={col.uniq} data={col} />
                         ))
-                    }z
+                    }
                 </ul>
                 <ul className={styles.rsContainer}>
                     {

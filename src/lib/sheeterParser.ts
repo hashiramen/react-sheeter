@@ -12,14 +12,16 @@ interface ISheeterOptions {
     schema: ISheetDefinition[];
 }
 
-export const sheeterParser: (_data: ISheeterParser, _opt: ISheeterOptions) => ISheetDefinition | undefined  = function(_data: ISheeterParser, _opt: ISheeterOptions): ISheetDefinition | undefined {
+type SheetParserMethod = (_data: ISheeterParser, _opt: ISheeterOptions) => ISheetDefinition | undefined;
+
+export const sheeterParser: SheetParserMethod  = ( _data: ISheeterParser, _opt: ISheeterOptions ): ISheetDefinition | undefined => {
     const currentSchema: ISheetDefinition | undefined = _opt.schema.find( ( sch ) => sch.name.toLowerCase() === _data.name.toLowerCase());
     if( isNullOrUndefined(currentSchema ))
         return undefined;
 
     const HEADERS: string[] = _data.rowsData[0];
     _data.rowsData.shift();
-    // const LONGEST_INDEX_ARRAY = findLongestArrayIndex( _data.rowsData );
+    
     const ROWS: ICellDefinition[][] =  [];
     for (let i = 0; i < currentSchema.columns.length; i++) {
         const column: IColumnDefinition = currentSchema.columns[i];

@@ -30,10 +30,8 @@ export default class ReactSheeterContainer extends React.PureComponent<IReactShe
     ];
     newSheets[targetIndex] = _sheet;
 
-    keyCleanUp(data, _keyResolver);
-
-    // this.cleanUp(newSheets);
-    this.props.handleSheetsUpdate(newSheets);
+    const cleanedUpSheets = keyCleanUp(newSheets, _keyResolver);
+    this.props.handleSheetsUpdate(cleanedUpSheets);
   }
 
 }
